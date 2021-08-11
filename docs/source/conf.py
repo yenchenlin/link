@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "toolbox"
+project = "Link"
 copyright = "2021, Yen-Chen Lin"
 author = "Yen-Chen Lin"
 
