@@ -52,3 +52,8 @@ html_static_path = []
 
 # Sidebars
 html_sidebars = {"**": ["sbt-sidebar-nav.html", "sbt-sidebar-footer.html"]}
+
+# Remove previous & next button
+html_theme_options = {
+  "show_prev_next": False
+}
