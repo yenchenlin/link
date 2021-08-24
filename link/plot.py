@@ -73,3 +73,35 @@ def draw_line(img: np.ndarray, line: np.ndarray, color=[255, 0, 0]):
     x1, y1 = map(int, [W, -(line[2] + line[0] * W) / line[1]])
     img = cv2.line(img, (x0, y0), (x1, y1), color, 1)
     return img
+
+
+def remap_using_flow_fields(
+    image: np.ndarray, disp_x: np.ndarray, disp_y: np.ndarray, 
+    interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_CONSTANT):
+    """
+    Create a new image where the value of each pixel (u, v) comes from 
+    (u+disp_x[u, v], v+disp_y[u, v])
+    For eacg pixel (u, v) in the new image, 
+
+    Reference:
+    https://stackoverflow.com/questions/46520123/how-do-i-use-opencvs-remap-function
+
+    Args:
+        image: image to be remapped. Shape (H, W, C).
+        disp_x: displacement in the horizontal direction for each pixel. Shape: (H, W).
+        disp_y: displacement in the vertical direction for each pixel. Shape: (H, W).
+        interpolation
+        border_mode
+    Returns:
+        remapped image, a np.ndarray of shape (H, W, C).
+    """
+    H, W = disp_x.shape[:2]
+
+    # Create the new image
+    X, Y = np.meshgrid(np.linspace(0, W - 1, W),
+                       np.linspace(0, H - 1, H))
+    map_x = (X+disp_x).astype(np.float32)
+    map_y = (Y+disp_y).astype(np.float32)
+    remapped_image = cv2.remap(image, map_x, map_y, interpolation=interpolation, borderMode=border_mode)
+
+    return remapped_image
