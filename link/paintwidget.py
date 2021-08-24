@@ -1,4 +1,4 @@
-from labwidget import Widget, Property
+from .labwidget import Widget, Property
 import html
 
 class SequentialProperty(Property):
