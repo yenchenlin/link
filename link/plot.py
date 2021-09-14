@@ -57,7 +57,7 @@ def visualize_depth(
     return vis
 
 
-def draw_line(img: np.ndarray, line: np.ndarray, color=[255, 0, 0]):
+def draw_line(img: np.ndarray, line: np.ndarray, color=[255, 0, 0], thickness=1):
     """
     Args:
         img: The image to be drawn.
@@ -71,7 +71,7 @@ def draw_line(img: np.ndarray, line: np.ndarray, color=[255, 0, 0]):
     H, W, _ = img.shape
     x0, y0 = map(int, [0, -line[2] / line[1]])
     x1, y1 = map(int, [W, -(line[2] + line[0] * W) / line[1]])
-    img = cv2.line(img, (x0, y0), (x1, y1), color, 1)
+    img = cv2.line(img, (x0, y0), (x1, y1), color, thickness)
     return img
 
 
