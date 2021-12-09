@@ -4,6 +4,34 @@ import cv2
 import numpy as np
 
 
+def reprojection(uvs_A, depth_A, c2w_A, c2w_B, K, H, W):
+    n_uvs = uvs_A.shape[0]
+    us_A = uvs_A[:, 0]
+    vs_A = uvs_A[:, 1]
+    depths_A = depth_A[vs_A, us_A]
+    xyz_A_camera = (np.stack([us_A, vs_A, np.ones([n_uvs])], axis=1) * depths_A[:, None]) @ np.linalg.inv(K).T
+    xyz_A_world = np.concatenate([xyz_A_camera, np.ones([n_uvs, 1])], axis=1) @ c2w_A.T
+    uvs_B = (xyz_A_world @ np.linalg.inv(c2w_B).T)[:, :3] @ K.T
+    uvs_B = (uvs_B[:, :2] / uvs_B[:, 2:]).astype(np.int32)
+
+    uvs_B[:, 0] = np.clip(uvs_B[:, 0], 0, W-1)
+    uvs_B[:, 1] = np.clip(uvs_B[:, 1], 0, H-1)
+    return uvs_B
+
+
+def draw_correspondence(rgb_A, rgb_B, uvs_A, uvs_B):
+    src_image_draw = rgb_A.copy()
+    tgt_image_draw = rgb_B.copy()
+    for idx_pt in range(uvs_A.shape[0]):
+        # print(idx_pt, uvs_A[idx_pt])
+        color = tuple((255*np.random.rand(3)).tolist())
+        src_image_draw = cv2.circle(src_image_draw, tuple(uvs_A[idx_pt]), 3, color, -1)
+        tgt_image_draw = cv2.circle(tgt_image_draw, tuple(uvs_B[idx_pt]), 3, color, -1)
+
+    media.show_images([src_image_draw, tgt_image_draw],
+                      titles=['source', 'target'], height=200)
+
+
 def colormap_from_heatmap(
     h,  # numpy array [H, W]
     normalize=False,  # whether or not to normalize to [0,1]
