@@ -2,4 +2,4 @@
 
 WIP codebase for myself.
 
-[Website](https://yenchenlin.me/toolbox/)
+[Website](https://yenchenlin.me/link/)
