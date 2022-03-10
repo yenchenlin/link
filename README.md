@@ -1,5 +1,5 @@
-# toolbox
+# link
 
-WIP codebase for myself.
+codebase for myself.
 
 [Website](https://yenchenlin.me/link/)
